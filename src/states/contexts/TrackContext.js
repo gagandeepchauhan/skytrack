@@ -4,11 +4,9 @@ import api from "../../api";
 const trackReducer = (state, action) => {
     switch(action.type){
         case "set_tracks" :
-            return { ...state, errorMessage: '' }
-        case "create_track" :
-            return { errorMessage: '', tracks: [...state.tracks, action.payload] }
+            return { errorMessage: '', tracks: action.payload };
         case "add_error" : 
-            return { ...state, errorMessage: action.payload }
+            return { ...state, errorMessage: action.payload };
         default:
             return state;
     }
@@ -16,13 +14,13 @@ const trackReducer = (state, action) => {
 
 const fetchTracks = dispatch => async (callback) => {
     try{
-        // const response = await api.get('/tracks');
+        const response = await api.get('/tracks');
         dispatch({
             type: "set_tracks",
-            payload: [] // response.data = { count, data: [ list of track objects ] }
+            payload: response.data?.data || [] // response.data = { count, data: [ list of track objects ] }
         });
     }catch(err){
-        console.log(err);
+        // console.log(err);
         dispatch({
             type: "add_error",
             payload: "Unable to fetch tracks"
@@ -34,16 +32,12 @@ const fetchTracks = dispatch => async (callback) => {
 
 const createTrack = dispatch => async (name, locations) => { // track is like { name, _id, locations : [ { timestamp, coords: { latitute, longitude, accuracy, speed, altitude, altitudeAccuracy } }, ... ] }
     try{
-        // const response = await api.post('/tracks', {
-        //     name,
-        //     locations
-        // });
-        dispatch({
-            type: "create_track",
-            payload: { name, locations }
+        await api.post('/tracks', {
+            name,
+            locations
         });
     }catch(err){
-        console.log(err);
+        // console.log(err);
         dispatch({
             type: "add_error",
             payload: "Unable to add a track"

@@ -5,7 +5,7 @@ import { Context as LocationContext } from "../states/contexts/LocationContext";
 
 const Map = ({ points }) => {
     const { state: { currentLocation, locations } } = useContext(LocationContext);
-    console.log("points -", points);
+    
     if(points){
         return (
             <MapView

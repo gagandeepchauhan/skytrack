@@ -36,6 +36,12 @@ const styles = StyleSheet.create({
     },
     totalOdometer:{
         fontFamily: "Poppins"
+    },
+    time:{
+        fontFamily: "Poppins",
+        fontSize: 12,
+        color: "grey",
+        marginBottom: 5
     }
 })
 

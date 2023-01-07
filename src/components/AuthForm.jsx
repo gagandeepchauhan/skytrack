@@ -18,6 +18,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtontext, loadin
             onChangeText={setUsername}
             autoCapitalize="none"
             autoCorrect={false}
+            keyboardType={'email-address'}
         />
         <Spacer/>
         <TextInput 

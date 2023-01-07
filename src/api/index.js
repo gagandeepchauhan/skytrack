@@ -1,13 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { API_URL } from "@env";
 
 const instance =  axios.create({
-    baseURL: "http://localhost:3001",
+    baseURL: API_URL,
     headers: {
         "Content-Type": "application/json"
     }
 });
-
+// console.log(API_URL)
 instance.interceptors.request.use(
     async (config) => {
         try{
@@ -16,10 +17,12 @@ instance.interceptors.request.use(
                 config.headers.Authorization = `Bearer ${token}`
             }
         }catch(e){
-            console.log(e);
+            // console.log("interceptor err" ,e);
         } 
+        return config;
     },
     (err) => {
+        // console.log("interceptor error" ,err);
         return Promise.reject(err);
     }
 );

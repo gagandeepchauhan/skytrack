@@ -18,22 +18,11 @@ const authReducer = (state, action) => {
 
 const signup = dispatch => async ({ username, password }, callback) => {
     try{
-        
-
-    }catch(err){
-
-    }finally{
-        if(callback) callback();
-    }
-};
-
-const signin = dispatch => async ({ username, password }, callback) => {
-    try{
-        // const response = await api.post('/auth/login', {
-        //     username,
-        //     password
-        // });
-        const token = "response.data?.token";
+        const response = await api.post('/signup', {
+            email: username,
+            password
+        });
+        const { token } = response.data;
         await AsyncStorage.setItem("skytrack_token", token);
         dispatch({
             type: "signin",
@@ -41,10 +30,34 @@ const signin = dispatch => async ({ username, password }, callback) => {
         });
         navigate("mainFlow");
     }catch(err){
-        console.log(err);
+        // console.log(err);
         dispatch({
             type: "add_error",
-            payload: "Something went wrong"
+            payload: err?.response?.data?.error || "Something went wrong"
+        });
+    }finally{
+        if(callback) callback();
+    }
+};
+
+const signin = dispatch => async ({ username, password }, callback) => {
+    try{
+        const response = await api.post('/signin', {
+            email: username,
+            password
+        });
+        const { token } = response.data;
+        await AsyncStorage.setItem("skytrack_token", token);
+        dispatch({
+            type: "signin",
+            payload: token
+        });
+        navigate("mainFlow");
+    }catch(err){
+        // console.log(err);
+        dispatch({
+            type: "add_error",
+            payload: err?.response?.data?.error || "Something went wrong"
         });
     }finally{
         if(callback) callback();

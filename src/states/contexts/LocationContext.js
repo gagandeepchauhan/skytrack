@@ -20,7 +20,7 @@ const locationReducer = (state, action) => {
 };
 
 const addLocation = dispatch => (location, isRecording) => {
-    console.log("Location - ", location);
+    // console.log("Location - ", location);
     if(isRecording){
         dispatch({
             type: "add_location",

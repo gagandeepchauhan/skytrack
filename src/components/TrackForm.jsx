@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import React, { useCallback, useContext, useState } from 'react';
 import { Context as LocationContext } from '../states/contexts/LocationContext';
 import Spacer from './Spacer';
@@ -15,14 +15,17 @@ const TrackForm = ({ navigation }) => {
     } = useContext(LocationContext);
     const [ _, saveTrack ] = useTracks();
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSaveTrack = useCallback(()=>{
+    const handleSaveTrack = useCallback(async ()=>{
         if(!name){
             setError("Name is required");
             return;
         }
+        setLoading(true);
         setError('');
-        saveTrack();
+        await saveTrack();
+        setLoading(false);
     },[saveTrack]);
 
     const handleReset = useCallback(()=>{
@@ -48,6 +51,7 @@ const TrackForm = ({ navigation }) => {
             <Spacer/>
             <TouchableOpacity
                 style={styles.btnStyle}
+                disabled={loading}
                 onPress={isRecording ? stopRecording : startRecording}
             >
                 <Text style={styles.loginText} >{isRecording ? 'Stop' : locations.length === 0 ? 'Start Recording' : 'Continue Recording'}</Text>
@@ -59,8 +63,13 @@ const TrackForm = ({ navigation }) => {
                         <TouchableOpacity
                             style={styles.btnOutlineStyle}
                             onPress={handleSaveTrack}
+                            disabled={loading}
                         >
-                            <Text style={styles.saveText} >Save Track</Text>
+                            {loading ?
+                                <ActivityIndicator size={"small"} color="rgb(12, 165, 242)" />
+                                :
+                                <Text style={styles.saveText} >Save Track</Text>
+                            }
                         </TouchableOpacity>
                     </>
                 :   null
@@ -71,6 +80,7 @@ const TrackForm = ({ navigation }) => {
                         <TouchableOpacity
                             style={styles.btnSecondaryStyle}
                             onPress={handleReset}
+                            disabled={loading}
                         >
                             <Text style={styles.resetText} >Reset Track</Text>
                         </TouchableOpacity>

@@ -1,5 +1,6 @@
 import createDataContext from "./createDataContext"
 import api from "../../api";
+import { navigate } from "../../navigationRef";
 
 const trackReducer = (state, action) => {
     switch(action.type){
@@ -7,6 +8,8 @@ const trackReducer = (state, action) => {
             return { errorMessage: '', tracks: action.payload };
         case "add_error" : 
             return { ...state, errorMessage: action.payload };
+        case "reset" :
+            return { errorMessage: '', tracks: [] };
         default:
             return state;
     }
@@ -20,7 +23,7 @@ const fetchTracks = dispatch => async (callback) => {
             payload: response.data?.data || [] // response.data = { count, data: [ list of track objects ] }
         });
     }catch(err){
-        // console.log(err);
+        console.log(err);
         dispatch({
             type: "add_error",
             payload: "Unable to fetch tracks"
@@ -43,7 +46,26 @@ const createTrack = dispatch => async (name, locations) => { // track is like { 
             payload: "Unable to add a track"
         });
     }
-}
+};
+
+const deleteTrack = dispatch => async (id) => { 
+    try{
+        await api.delete(`/tracks/${id}`);
+        navigate("TrackList");
+    }catch(err){
+        console.log(err?.response);
+        dispatch({
+            type: "add_error",
+            payload: "Unable to delete a track"
+        });
+    }
+};
+
+const reset = dispatch => () => {
+    dispatch({
+        type: "reset"
+    });
+};
 
 const initialValue = {
     errorMessage: '',
@@ -52,6 +74,6 @@ const initialValue = {
 
 export const { Context, Provider } = createDataContext(
     trackReducer, 
-    { fetchTracks, createTrack }, 
+    { fetchTracks, createTrack, reset, deleteTrack }, 
     initialValue
 );

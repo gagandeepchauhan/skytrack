@@ -42,6 +42,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: "grey",
         marginBottom: 5
+    },
+    delete:{
+        paddingVertical: 3,
+        paddingHorizontal: 8,
+        backgroundColor: "red",
+        borderRadius: 5
+    },
+    deleteText:{
+        color: "#fff",
+        fontFamily: "Poppins"
     }
 })
 

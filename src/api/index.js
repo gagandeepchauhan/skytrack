@@ -17,12 +17,13 @@ instance.interceptors.request.use(
                 config.headers.Authorization = `Bearer ${token}`
             }
         }catch(e){
+
             // console.log("interceptor err" ,e);
         } 
         return config;
     },
     (err) => {
-        // console.log("interceptor error" ,err);
+        console.log("interceptor error" ,err);
         return Promise.reject(err);
     }
 );

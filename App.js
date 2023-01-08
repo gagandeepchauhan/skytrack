@@ -64,13 +64,13 @@ export default function (){
   }
   return (
     <SafeAreaProvider>
-      <AuthProvider>
+      <TrackProvider>
         <LocationProvider>
-          <TrackProvider>
+          <AuthProvider>
             <App ref={navigation => setNavigator(navigation)} />
-          </TrackProvider>
+          </AuthProvider>
         </LocationProvider>
-      </AuthProvider>
+      </TrackProvider>
     </SafeAreaProvider> 
   );
 }
